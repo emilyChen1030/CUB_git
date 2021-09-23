@@ -2,40 +2,40 @@ package com.coin.model;
 
 public class CoinBo {
 
-	private Long id;
-    private String coin;
+    private String code;
     private String chineseName;
-    
-    public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getCoin() {
-		return coin;
-	}
-
-	public void setCoin(String coin) {
-		this.coin = coin;
-	}
+    private Double rate;
 
 	public String getChineseName() {
 		return chineseName;
 	}
 
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
 	public void setChineseName(String chineseName) {
 		this.chineseName = chineseName;
+	}
+	
+	public Double getRate() {
+		return rate;
+	}
+
+	public void setRate(Double rate) {
+		this.rate = rate;
 	}
 
 	@Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("id:" + id + ",");
-        sb.append("coin:" + coin + ",");
-        sb.append("chineseName:" + chineseName);
+        sb.append("code:" + code + ",");
+        sb.append("chineseName:" + chineseName + ",");
+        sb.append("rate:" + rate);
         return sb.toString();
     }
 }
