@@ -1,13 +1,16 @@
 package com.coin.serivce;
 
-import org.springframework.stereotype.Component;
+import java.util.List;
 
-import com.coin.entity.Coin;
+import com.coin.model.CoinBo;
+import com.coin.model.CoinVo;
 
-@Component
 public interface CoinService {
 
-	public Coin saveCoin(Coin coin);
+	public void saveCoin(CoinBo coinBo);
 
+	public List<CoinVo> getCoin(String code);
+
+	public void updateCoin(CoinBo coinBo);
 
 }

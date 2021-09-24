@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<!-- %m輸出的訊息,%p日誌級别,%t執行緒名,%d日期,%c類別的全名,%i索引 (從數字0開始遞增), %X自定義參數 -->      
+	<!-- appender是configuration的子節點，是負責寫日誌的組件 -->  
+	<!-- ConsoleAppender：把日誌輸出到控制台 -->
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">      
+		<encoder>      
+			<!-- <pattern>%d %p (%file:%line\)- %m%n</pattern> -->
+			<!-- 控制台也要使用UTF-8，不要使用GBK，否則會中文亂碼 -->
+			<pattern>%d{"yyyy-MM-dd HH:mm:ss,SSS"} [%p]%X{sessionId} %X{txnSeq}[%t] \(%F:%L\)%M : %m%n</pattern>
+			<charset>UTF-8</charset>     
+		</encoder>      
+	</appender>
+	
+	<!-- RollingFileAppender：滾動記錄文件，先將日誌記錄到指定文件，當符合某個條件時，將日誌紀錄到其他文件 -->  
+	<!-- 以下的大概意思是：1.先按日期存日誌，日期變了，將前一天的日誌文件名重命名為XXX%日期%索引，新的日誌仍然是feSrc.log -->  
+	<!--             2.如果日期没有發生變化，但是當前日誌的文件大小超過100MB時，對对當前日誌進行分割 重命名-->
+	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>log/uniServ.log</File>
+		<!-- rollingPolicy:當發生滾動時，决定 RollingFileAppender 的行為，涉及文件移動和重命名。 -->
+		<!-- TimeBasedRollingPolicy： 最常用的滾動策略，它根據時間來制定滾動策略，既負責滾動也負責觸發滾動 -->
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- 活動文件的名字會根據fileNamePattern的值，每隔一段時間改變一次 -->
+			<!-- 文件名：log/uniServ.2017-12-05.0.log -->
+			<fileNamePattern>log-backup/uniServ.%d.%i.log</fileNamePattern>
+			<!-- 每產生一個日誌文件，該日誌文件的保存期限約為7年(365*7) -->
+			<maxHistory>2560</maxHistory>
+			<timeBasedFileNamingAndTriggeringPolicy  class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<!-- maxFileSize:這是活動文件的大小，默認值是10MB,這邊設置為100MB -->
+				<maxFileSize>100MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+		<encoder>
+			<!-- pattern節點，用來設置日誌的輸入格式 -->
+			<pattern>
+				%d{HH:mm:ss.SSS} [%p]%X{sessionId} %X{txnSeq}[%t] \(%F:%L\)%M - %m%n
+			</pattern>
+			<charset>UTF-8</charset>
+		</encoder>
+		<!-- <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>%d{HH:mm:ss.SSS} %p (%file:%line\)- %m%n</Pattern>
+        </layout> -->
+	</appender>
+	
+	<!-- 控制台輸出日誌級別 -->  
+	<root level="debug">
+		<appender-ref ref="STDOUT" /> 
+		<appender-ref ref="FILE" />
+	</root>
+	<!-- 指定項目中某个包，當有日誌操作行為時的日誌紀錄級別 -->
+	<!-- com.demo.controller 為根目錄，也就是只要是發生在這個根目錄下面的所有日誌操作行為的權限都是DEBUG -->
+	<!-- 級别依序為(從高到低)：FATAL > ERROR > WARN > INFO > DEBUG > TRACE  -->
+	<!-- <logger name="com.demo.controller" level="debug">
+		<appender-ref ref="FILE" />
+	</logger>     -->
+	<logger name="com.zaxxer.hikari" level="error"/>
+	<logger name="com.cki" level="debug"/>
+	<logger name="org.apache.cxf.services" level="INFO" />
+</configuration>
