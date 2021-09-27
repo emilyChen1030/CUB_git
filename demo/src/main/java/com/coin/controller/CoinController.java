@@ -60,10 +60,8 @@ public class CoinController {
 	}
 	
 	//呼叫coindesk API
-	@RequestMapping(value = "/queryCoinDesk", method = RequestMethod.GET, consumes = "application/json", produces="application/json")
+	@RequestMapping(value = "/queryCoinDesk", method = RequestMethod.GET)
 	public String showCoinDeskAPI() {
-		HttpHeaders headers = new HttpHeaders();
-		headers.add("Content-Type", "application/json");
 		String coinDeskAPIData = coinService.showCoinDeskAPI();
 		if(coinDeskAPIData != null) {
 	        return coinDeskAPIData;
@@ -73,7 +71,7 @@ public class CoinController {
 	}
 	
 	//測試呼叫資料轉換的API
-	@RequestMapping(value = "/queryChangeCoinDesk", method = RequestMethod.GET, consumes = "application/json", produces="application/json")
+	@RequestMapping(value = "/queryChangeCoinDesk", method = RequestMethod.GET)
 	public CoinVo inputCoinDeskAPIData() throws ParseException {
 		CoinVo coinVo =coinService.inputCoinDeskAPIData();
 		return coinVo;
