@@ -1,10 +1,13 @@
 package com.coin.controller;
 
+import java.text.ParseException;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -30,23 +33,49 @@ public class CoinController {
 	//新增
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	@ResponseBody
-    public void saveCoin(@RequestBody CoinBo coinBo) {
+    public void saveCoin(@RequestBody CoinBo coinBo) throws ParseException {
 		coinService.saveCoin(coinBo);
     }
 	
 	//查詢
 	@RequestMapping(value = "/query", method = RequestMethod.GET)
 	@ResponseBody
-	public List<CoinVo> queryCoin(@RequestBody @RequestParam("code")String code) {
-		List<CoinVo> coinVo = coinService.getCoin(code);
+	public List<Coin> queryCoin(@RequestParam(value ="code", required=false)String code) {
+		List<Coin> coinVo = coinService.getCoin(code);
 		return coinVo;
     }
 	
 	//修改
 	@RequestMapping(value = "/update", method = RequestMethod.PUT)
 	@ResponseBody
-	public void updateCoin(@RequestBody CoinBo coinBo) {
+	public void updateCoin(@RequestBody CoinBo coinBo) throws ParseException {
 		coinService.updateCoin(coinBo);
 	}
 	
+	//刪除
+	@DeleteMapping("/delete")
+	@ResponseBody
+	public void deleteCoin(@RequestParam(value ="code")String code) {
+		coinService.deleteCoin(code);
+	}
+	
+	//呼叫coindesk API
+	@RequestMapping(value = "/queryCoinDesk", method = RequestMethod.GET, consumes = "application/json", produces="application/json")
+	public String showCoinDeskAPI() {
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Content-Type", "application/json");
+		String coinDeskAPIData = coinService.showCoinDeskAPI();
+		if(coinDeskAPIData != null) {
+	        return coinDeskAPIData;
+	    } else {
+	        return "";
+	    }
+	}
+	
+	//測試呼叫資料轉換的API
+	@RequestMapping(value = "/queryChangeCoinDesk", method = RequestMethod.GET, consumes = "application/json", produces="application/json")
+	public CoinVo inputCoinDeskAPIData() throws ParseException {
+		CoinVo coinVo =coinService.inputCoinDeskAPIData();
+		return coinVo;
+	}
 }

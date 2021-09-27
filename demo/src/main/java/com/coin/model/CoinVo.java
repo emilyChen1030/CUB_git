@@ -1,53 +1,30 @@
 package com.coin.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.coin.entity.Coin;
+
 
 public class CoinVo {
 
-	private long id;
-    private String code;
-    private String chineseName;
-    private Double rate;
+    private String updateTime;
+    private List<Coin> coinList = new ArrayList<>();
+
+	public String getUpdateTime() {
+		return updateTime;
+	}
+
+	public void setUpdateTime(String updateTime) {
+		this.updateTime = updateTime;
+	}
+
+	public List<Coin> getCoinList() {
+		return coinList;
+	}
+
+	public void setCoinList(List<Coin> coinList) {
+		this.coinList = coinList;
+	}
 	
-    public CoinVo(Coin coin) {
-    	this.id = coin.getId();
-        this.code = coin.getCode();
-        this.chineseName = coin.getChineseName();
-        this.rate = coin.getRate();
-    }
-
-    
-	public long getId() {
-		return id;
-	}
-
-
-	public void setId(long id) {
-		this.id = id;
-	}
-
-
-	public String getCode() {
-		return code;
-	}
-
-	public void setCode(String code) {
-		this.code = code;
-	}
-
-	public String getChineseName() {
-		return chineseName;
-	}
-
-	public void setChineseName(String chineseName) {
-		this.chineseName = chineseName;
-	}
-
-	public Double getRate() {
-		return rate;
-	}
-
-	public void setRate(Double rate) {
-		this.rate = rate;
-	}
 }

@@ -1,6 +1,7 @@
 package com.coin.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,7 +16,7 @@ public class Coin implements Serializable{
 
 	 	@Id
 	 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	    private Long id;
+	    private int id;
 	 	
 	 	@Column(name = "code")
 	    private String code;
@@ -27,13 +28,13 @@ public class Coin implements Serializable{
 	    private Double rate;
 	 	
 	 	@Column(name = "update_time")
-	    private String updateTime;
+	    private Date updateTime;
 	    
-		public Long getId() {
+		public int getId() {
 			return id;
 		}
 		
-		public void setId(Long id) {
+		public void setId(int id) {
 			this.id = id;
 		}
 		
@@ -61,11 +62,11 @@ public class Coin implements Serializable{
 			this.rate = rate;
 		}
 
-		public String getUpdateTime() {
+		public Date getUpdateTime() {
 			return updateTime;
 		}
 
-		public void setUpdateTime(String string) {
+		public void setUpdateTime(Date string) {
 			this.updateTime = string;
 		}
 		
