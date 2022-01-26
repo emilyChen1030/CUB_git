@@ -86,7 +86,7 @@ public class CoinServiceImpl implements CoinService{
 		String coinDeskAPIData = showCoinDeskAPI();
 		
 		List<Coin> coin = new ArrayList<>();
-		JSONObject coinDeskAPIObj = JSON.parseObject(coinDeskAPIData);
+		JSONObject coinDeskAPIObj = JSON.parseObject(coinDeskAPIData); 
 		
 		String time = coinDeskAPIObj.getObject("time", String.class);
 		JSONObject timeObj = JSON.parseObject(time);
