@@ -53,10 +53,10 @@ public class CoinController {
 	}
 	
 	//刪除
-	@DeleteMapping("/delete")
+	@RequestMapping(value = "/delete", method = RequestMethod.DELETE)
 	@ResponseBody
-	public void deleteCoin(@RequestParam(value ="code")String code) {
-		coinService.deleteCoin(code);
+	public void deleteCoin(@RequestBody CoinBo coinBo) {
+		coinService.deleteCoin(coinBo.getCode());
 	}
 	
 	//呼叫coindesk API
