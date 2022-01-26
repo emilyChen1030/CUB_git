@@ -26,7 +26,7 @@ import com.coin.serivce.CoinService;
 public class CoinController {
 
 	@Autowired
-	private CoinService coinService;
+	private CoinService coinService; 
 	
 	private  Logger logger = LoggerFactory.getLogger(this.getClass());
 	
