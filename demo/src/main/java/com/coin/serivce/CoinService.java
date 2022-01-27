@@ -6,10 +6,11 @@ import java.util.List;
 import com.coin.entity.Coin;
 import com.coin.model.CoinBo;
 import com.coin.model.CoinVo;
+import com.coin.response.CoinResponse;
 
 public interface CoinService {
 
-	public void saveCoin(CoinBo coinBo) throws ParseException;
+	public CoinResponse saveCoin(CoinBo coinBo) throws ParseException;
 
 	public List<Coin> getCoin(String code);
 

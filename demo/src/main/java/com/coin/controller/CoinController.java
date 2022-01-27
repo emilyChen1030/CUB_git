@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.coin.entity.Coin;
 import com.coin.model.CoinBo;
 import com.coin.model.CoinVo;
+import com.coin.repository.CoinRepository;
+import com.coin.response.CoinResponse;
 import com.coin.serivce.CoinService;
 
 
@@ -28,13 +31,25 @@ public class CoinController {
 	@Autowired
 	private CoinService coinService; 
 	
+	@Autowired
+    private CoinRepository coinRepository;
+	
 	private  Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	//新增
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
-	@ResponseBody
-    public void saveCoin(@RequestBody CoinBo coinBo) throws ParseException {
-		coinService.saveCoin(coinBo);
+    public @ResponseBody CoinResponse saveCoin(@RequestBody CoinBo coinBo) throws ParseException {
+		String errMsg = validRequest(coinBo.getCode());
+		if(!errMsg.equals("")) {
+			CoinResponse response = new CoinResponse(CoinResponse.PARAMS_ERROR, errMsg);
+			return response;
+		}else {
+			coinService.saveCoin(coinBo);
+			CoinResponse response = new CoinResponse(); //default success
+			return response;
+			
+		}
+		
     }
 	
 	//查詢
@@ -47,16 +62,31 @@ public class CoinController {
 	
 	//修改
 	@RequestMapping(value = "/update", method = RequestMethod.PUT)
-	@ResponseBody
-	public void updateCoin(@RequestBody CoinBo coinBo) throws ParseException {
-		coinService.updateCoin(coinBo);
+	public @ResponseBody CoinResponse updateCoin(@RequestBody CoinBo coinBo) throws ParseException {
+		String errMsg = validRequestUpdate(coinBo.getCode());
+		if(!errMsg.equals("")) {
+			CoinResponse response = new CoinResponse(CoinResponse.PARAMS_ERROR, errMsg);
+			return response;
+		}else {
+			coinService.updateCoin(coinBo);
+			CoinResponse response = new CoinResponse(); //default success
+			return response;
+		}
 	}
 	
 	//刪除
 	@RequestMapping(value = "/delete", method = RequestMethod.DELETE)
-	@ResponseBody
-	public void deleteCoin(@RequestBody CoinBo coinBo) {
-		coinService.deleteCoin(coinBo.getCode());
+	public @ResponseBody CoinResponse deleteCoin(@RequestBody CoinBo coinBo) {
+		String errMsg = validRequestUpdate(coinBo.getCode());
+		if(!errMsg.equals("")) {
+			CoinResponse response = new CoinResponse(CoinResponse.PARAMS_ERROR, errMsg);
+			return response;
+		}else {
+			coinService.deleteCoin(coinBo.getCode());
+			CoinResponse response = new CoinResponse(); //default success
+			return response;
+		}
+		
 	}
 	
 	//呼叫coindesk API
@@ -76,4 +106,22 @@ public class CoinController {
 		CoinVo coinVo =coinService.inputCoinDeskAPIData();
 		return coinVo;
 	}
+	
+	
+	private String validRequest(String code) {
+		String chineseName = coinRepository.findChineseName(code);
+		if(chineseName == null) {
+			return "";
+		}
+		return "data have code : " + code;
+	}
+	
+	private String validRequestUpdate(String code) {
+		String chineseName = coinRepository.findChineseName(code);
+		if(chineseName == null) {
+			return "data not find : " + code;
+		}
+		return "";
+	}
+
 }

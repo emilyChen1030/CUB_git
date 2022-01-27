@@ -1,6 +1,5 @@
 package com.coin.service.impl;
 
-import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -19,6 +18,7 @@ import com.coin.entity.Coin;
 import com.coin.model.CoinBo;
 import com.coin.model.CoinVo;
 import com.coin.repository.CoinRepository;
+import com.coin.response.CoinResponse;
 import com.coin.serivce.CoinService;
 
 @Service("coinService")
@@ -30,7 +30,8 @@ public class CoinServiceImpl implements CoinService{
 	private RestTemplate restTemplate = new RestTemplate();
 	
 	@Override
-	public void saveCoin(CoinBo coinBo) throws ParseException {
+	public CoinResponse saveCoin(CoinBo coinBo) throws ParseException {
+		CoinResponse rs = null;
 		Coin coin = new Coin();
 		coin.setCode(coinBo.getCode());
 		coin.setChineseName(coinBo.getChineseName());
@@ -40,6 +41,7 @@ public class CoinServiceImpl implements CoinService{
 		Date temp = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").parse(sdFormat.format(current));
 		coin.setUpdateTime(temp);
 		coinRepository.save(coin);
+		return rs;
 	}
 
 	@Override
